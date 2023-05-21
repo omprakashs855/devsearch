@@ -2,9 +2,23 @@
 {% block content %}
 <h1>Projects Template</h1>
 <hr>
-<ul>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Project</th>
+        <th>Votes</th>
+        <th>Ratio</th>
+        <th>Created</th>
+    </tr>
     {% for project in projectList %}
-        <li>Title: <a href="{% url 'single-project' project.id %}">{{ project.title }}</a> -- {{ project.description }}</li>
+    <tr>
+        <td>{{ project.id }}</td>
+        <td><a href="{% url 'single-project' project.id %}">{{ project.title }}</a></td>
+        <td>{{ project.vote_total }}</td>
+        <td>{{ project.vote_ratio }}</td>
+        <td>{{ project.created }}</td>
+    </tr>
     {% endfor %}
-</ul>
+</table>
 {% endblock %}
