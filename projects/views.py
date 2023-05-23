@@ -16,7 +16,7 @@ def project(request, pk):
 def createProject(request):
     form = ProjectForm()
     if request.method == 'POST':
-        form = ProjectForm(request.POST)
+        form = ProjectForm(request.POST, request.FILES)
         if form.is_valid(): #check the form if valid
             form.save() # save the data into database
             return redirect('projects') # redirect to homepage
@@ -28,7 +28,7 @@ def updateProject(request, pk):
     project = Project.objects.get(id=pk)
     form = ProjectForm(instance=project)
     if request.method == 'POST':
-        form = ProjectForm(request.POST, instance=project)
+        form = ProjectForm(request.POST, request.FILES, instance=project)
         if form.is_valid(): #check the form if valid
             note = form.save(commit=False) # to retain the data while editing
             note.save() # save the data into database
