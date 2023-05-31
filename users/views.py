@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from .models import Profile
 from .forms import CustomUserCreationForm, ProfileForm, SkillForm
+from .utils import searchProfiles
 
 # Create your views here.
 
@@ -24,6 +25,7 @@ def loginUser(request):
         if user is not None:
             # Create a session for that user
             login(request, user)
+            messages.success(request, f'{user.profile.name} logged in')
             return redirect('profiles')
         else:
             messages.error(request, 'Username OR password is incorrect')
@@ -32,7 +34,7 @@ def loginUser(request):
 
 def logoutUser(request):
     logout(request)
-    messages.success(request, 'Username was logged out')
+    messages.success(request, f'User was logged out')
     return redirect('login')
 
 def registerUser(request):
@@ -54,8 +56,9 @@ def registerUser(request):
     return render(request, 'users/login_register.html', context)
 
 def profiles(request):
-    profiles = Profile.objects.all()
-    return render(request, 'users/profiles.html', {'profiles': profiles})
+    profiles, search_query = searchProfiles(request)
+    context = {'profiles': profiles, 'search_query': search_query}
+    return render(request, 'users/profiles.html', context)
 
 def userProfile(request, pk):
     profile = Profile.objects.get(id=pk)
